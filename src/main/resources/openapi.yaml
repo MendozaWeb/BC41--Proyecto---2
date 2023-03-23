@@ -1,0 +1,1498 @@
+openapi: 3.0.3
+info:
+  title: Swagger Bootcamp - OpenAPI 3.0
+  description: Contrato de Banco Bootcamp
+  version: 1.0.0
+servers:
+  - url: nttdata/
+tags:
+  - name: Person
+    description: Datos de los clientes personales
+  - name: Company
+    description: Datos de los clientes empresariales
+  - name: Transaction
+    description: Datos de las transacciones
+  - name: Credit
+    description: Datos de los creditos
+  - name: CreditCard
+    description: Datos de las tarjetas de credito
+  - name: Account
+    description: Datos de las cuentas
+paths:
+  /person:
+    get:
+      tags:
+        - Person
+      summary: Find All Customers Personal
+      description: Find All Customers Personal
+      operationId: findAllPerson
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponseDto'
+    put:
+      tags:
+        - Person
+      summary: Update an existing customer personal
+      description: Update an existing customer personal by Id
+      operationId: updatePerson
+      requestBody:
+        description: Update an existent customer in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponseDto'
+    post:
+      tags:
+        - Person
+      summary: Add a new customer personal to the bank
+      description: Add a new customer personal to the bank
+      operationId: createPerson
+      requestBody:
+        description: Create a new customer in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponseDto'
+  /person/{personId}:
+    get:
+      tags:
+        - Person
+      summary: Find Customers Personal by id
+      description: Find Customers Personal by id
+      operationId: findPersonById
+      parameters:
+        - name: personId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponseDto'
+  /company:
+    get:
+      tags:
+        - Company
+      summary: Find All Customers Company
+      description: Find All Customers Company
+      operationId: findAllCompany
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponseDto'
+    put:
+      tags:
+        - Company
+      summary: Update an existing customer company
+      description: Update an existing customer company by Id
+      operationId: updateCompany
+      requestBody:
+        description: Update an existent customer company in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponseDto'
+    post:
+      tags:
+        - Company
+      summary: Add a new customer company to the bank
+      description: Add a new customer company to the bank
+      operationId: createCompany
+      requestBody:
+        description: Create a new customer company in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponseDto'
+  /company/{companyId}:
+    get:
+      tags:
+        - Company
+      summary: Find Customers Company by id
+      description: Find Customers Company by id
+      operationId: findCompanyById
+      parameters:
+        - name: companyId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyResponseDto'
+  /transaction:
+    get:
+      tags:
+        - Transaction
+      summary: Find All Transaction
+      description: Find All Transaction
+      operationId: findAllTransaction
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponseDto'
+    put:
+      tags:
+        - Transaction
+      summary: Update an existing transaction
+      description: Update an existing transaction by Id
+      operationId: updateTransaction
+      requestBody:
+        description: Update an existent transaction in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponseDto'
+    post:
+      tags:
+        - Transaction
+      summary: Add a new transaction to the bank
+      description: Add a new transaction to the bank
+      operationId: createTransaction
+      requestBody:
+        description: Create a new customer company in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponseDto'
+  /transaction/{transactionId}:
+    get:
+      tags:
+        - Transaction
+      summary: Find Transaction by id
+      description: Find Transaction by id
+      operationId: findTransactionById
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponseDto'
+  /transaction/customer/{customerId}:
+    get:
+      tags:
+        - Transaction
+      summary: Find Transaction by customerId
+      description: Find Transaction by customerId
+      operationId: findTransactionByCustomerId
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponseDto'
+  /transaction/product/{productId}:
+    get:
+      tags:
+        - Transaction
+      summary: Find Transaction by productId
+      description: Find Transaction by productId
+      operationId: findTransactionByProductId
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponseDto'
+  /credit:
+    get:
+      tags:
+        - Credit
+      summary: Find All Credit
+      description: Find All Credit
+      operationId: findAllCredit
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponseDto'
+    put:
+      tags:
+        - Credit
+      summary: Update an existing Credit
+      description: Update an existing Credit by Id
+      operationId: updateCredit
+      requestBody:
+        description: Update an existent Credit in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponseDto'
+  /credit/person:
+    post:
+      tags:
+        - Credit
+      summary: Add a new Credit person to the bank
+      description: Add a new Credit person to the bank
+      operationId: createCreditPerson
+      requestBody:
+        description: Create a new Credit person in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponseDto'
+  /credit/company:
+    post:
+      tags:
+        - Credit
+      summary: Add a new Credit company to the bank
+      description: Add a new Credit company to the bank
+      operationId: createCreditCompany
+      requestBody:
+        description: Create a new Credit company in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponseDto'
+  /credit/{creditId}:
+    get:
+      tags:
+        - Credit
+      summary: Find Credit by id
+      description: Find Credit by id
+      operationId: findCreditById
+      parameters:
+        - name: creditId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditResponseDto'
+  /credit/pay:
+    post:
+      tags:
+        - Credit
+      summary: Pay a credit person or company to the bank
+      description: Pay a credit person or company to the bank
+      operationId: payCredit
+      requestBody:
+        description: Pay a Credit person or company in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditPayRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditPayResponseDto'
+  /creditCard:
+    get:
+      tags:
+        - CreditCard
+      summary: Find All CreditCard
+      description: Find All CreditCard
+      operationId: findAllCreditCard
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCardResponseDto'
+    put:
+      tags:
+        - CreditCard
+      summary: Update an existing CreditCard
+      description: Update an existing CreditCard by Id
+      operationId: updateCreditCard
+      requestBody:
+        description: Update an existent CreditCard in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCardResponseDto'
+  /creditCard/person:
+    post:
+      tags:
+        - CreditCard
+      summary: Add a new creditCard person to the bank
+      description: Add a new creditCard person to the bank
+      operationId: createCreditCardPerson
+      requestBody:
+        description: Create a new CreditCard person in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCardResponseDto'
+  /creditCard/company:
+    post:
+      tags:
+        - CreditCard
+      summary: Add a new CreditCard company to the bank
+      description: Add a new CreditCard company to the bank
+      operationId: createCreditCardCompany
+      requestBody:
+        description: Create a new CreditCard company in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCardResponseDto'
+  /creditCard/{creditCardId}:
+    get:
+      tags:
+        - CreditCard
+      summary: Find CreditCard by id
+      description: Find CreditCard by id
+      operationId: findCreditCardById
+      parameters:
+        - name: creditCardId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCardResponseDto'
+  /creditCard/customer/{customerId}:
+    get:
+      tags:
+        - CreditCard
+      summary: Find CreditCard by customerId
+      description: Find CreditCard by customerId
+      operationId: findCreditCardByCustomerId
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCardResponseDto'
+  /creditCard/pay:
+    post:
+      tags:
+        - CreditCard
+      summary: Pay a creditCard person or company to the bank
+      description: Pay a creditCard person or company to the bank
+      operationId: payCreditCard
+      requestBody:
+        description: Pay a CreditCard person or company in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardPayRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCardPayResponseDto'
+  /creditCard/consume:
+    post:
+      tags:
+        - CreditCard
+      summary: Consume credit card balance
+      description: consume credit card balance
+      operationId: consumeCreditCard
+      requestBody:
+        description: consume credit card balance
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardConsumeRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditCardConsumeResponseDto'
+  /account:
+    get:
+      tags:
+        - Account
+      summary: Find All Account
+      description: Find All Account
+      operationId: findAllAccount
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseDto'
+    put:
+      tags:
+        - Account
+      summary: Update an existing Account
+      description: Update an existing Account by Id
+      operationId: updateAccount
+      requestBody:
+        description: Update an existent Account in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseDto'
+  /account/person:
+    post:
+      tags:
+        - Account
+      summary: Add a new account person to the bank
+      description: Add a new account person to the bank
+      operationId: createAccountPerson
+      requestBody:
+        description: Create a new account person in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseDto'
+  /account/company:
+    post:
+      tags:
+        - Account
+      summary: Add a new account company to the bank
+      description: Add a new account company to the bank
+      operationId: createAccountCompany
+      requestBody:
+        description: Create a new account company in the bank
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseDto'
+  /account/{accountId}:
+    get:
+      tags:
+        - Account
+      summary: Find Account by id
+      description: Find Account by id
+      operationId: findAccountById
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseDto'
+  /account/typeAccount/{typeAccount}:
+    get:
+      tags:
+        - Account
+      summary: Find Account by type account
+      description: Find Account by type account
+      operationId: findAccountByTypeAccount
+      parameters:
+        - in: path
+          name: typeAccount
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseDto'
+  /account/customer/{customerId}:
+    get:
+      tags:
+        - Account
+      summary: Find Account by customerId
+      description: Find Account by customerId
+      operationId: findAccountByCustomerId
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponseDto'
+  /account/deposit:
+    post:
+      tags:
+        - Account
+      summary: Deposit into account
+      description: Deposit into account
+      operationId: depositAccount
+      requestBody:
+        description: Deposit into account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountDepositRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDepositResponseDto'
+  /account/withdraw:
+    post:
+      tags:
+        - Account
+      summary: Withdraw from account
+      description: Withdraw from account
+      operationId: withdrawAccount
+      requestBody:
+        description: Withdraw from account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountWithdrawRequestDto'
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountWithdrawResponseDto'
+components:
+  schemas:
+    Person:
+      required:
+        - dni
+        - email
+        - id
+        - lastName
+        - name
+        - telephone
+        - profile
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        name:
+          type: string
+          example: Antonio
+        lastName:
+          type: string
+          example: Silva
+        dni:
+          type: string
+          example: "76893214"
+        email:
+          type: string
+          example: antsi@correo.com
+        telephone:
+          type: string
+          example: "945856325"
+        profile:
+          type: string
+          example: ESTANDAR
+    PersonResponseDto:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+        person:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+    PersonRequestDto:
+      required:
+        - dni
+        - email
+        - lastName
+        - name
+        - telephone
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        name:
+          type: string
+          example: Antonio
+        lastName:
+          type: string
+          example: Silva
+        dni:
+          type: string
+          example: "76893214"
+        email:
+          type: string
+          example: antsi@correo.com
+        telephone:
+          type: string
+          example: "945856325"
+    Company:
+      required:
+        - businessName
+        - email
+        - holders
+        - id
+        - ruc
+        - telephone
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        businessName:
+          type: string
+          example: Umbral
+        ruc:
+          type: string
+          example: "10256987580"
+        email:
+          type: string
+          example: contact@umbral.com
+        telephone:
+          type: string
+          example: "259864"
+        profile:
+          type: string
+          example: ESTANDAR
+        holders:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorizedDto'
+        signatories:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorizedDto'
+    AuthorizedDto:
+      required:
+        - dni
+        - email
+        - lastName
+        - name
+        - telephone
+      type: object
+      properties:
+        name:
+          type: string
+          example: Antonio
+        lastName:
+          type: string
+          example: Silva
+        dni:
+          type: string
+          example: "76893214"
+        email:
+          type: string
+          example: antsi@correo.com
+        telephone:
+          type: string
+          example: "945856325"
+    CompanyResponseDto:
+      required:
+        - company
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+        company:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+    MessageStatus:
+      required:
+        - message
+        - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: "0"
+        message:
+          type: string
+          example: Operacion exitosa.
+    CompanyRequestDto:
+      required:
+        - businessName
+        - email
+        - holders
+        - ruc
+        - telephone
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        businessName:
+          type: string
+          example: Umbral
+        ruc:
+          type: string
+          example: "10256987580"
+        email:
+          type: string
+          example: contact@umbral.com
+        telephone:
+          type: string
+          example: "259864"
+        holders:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorizedDto'
+        signatories:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthorizedDto'
+    Transaction:
+      required:
+        - amount
+        - customerId
+        - id
+        - productId
+        - productType
+        - transactionDate
+        - transactionType
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        productType:
+          type: string
+          example: AHORRO
+        productId:
+          type: string
+          example: "1"
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        transactionType:
+          type: string
+          example: RETIRO
+        amount:
+          type: number
+          format: double
+          example: 500
+        transactionDate:
+          type: string
+          example: 12-03-2023
+    TransactionResponseDto:
+      required:
+        - id
+        - name
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+        transaction:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+    TransactionRequestDto:
+      required:
+        - amount
+        - customerId
+        - productId
+        - productType
+        - transactionDate
+        - transactionType
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        productType:
+          type: string
+          example: AHORRO
+        productId:
+          type: string
+          example: "1"
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        transactionType:
+          type: string
+          example: RETIRO
+        amount:
+          type: number
+          format: double
+          example: 500
+        transactionDate:
+          type: string
+          example: 12-03-2023
+    Credit:
+      required:
+        - amountFee
+        - createDate
+        - customerId
+        - customerType
+        - id
+        - payDay
+        - quantityFee
+        - settlementAmount
+        - totalAmount
+        - totalFee
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerType:
+          type: string
+          example: PERSONAL
+        totalAmount:
+          type: number
+          format: double
+          example: 500
+        amountFee:
+          type: number
+          format: double
+          example: 18
+        quantityFee:
+          type: integer
+          example: 12
+        totalFee:
+          type: integer
+          example: 12
+        settlementAmount:
+          type: number
+          format: double
+          example: 500
+        payDay:
+          type: string
+          example: 12-03-2023
+        createDate:
+          type: string
+          example: 12-03-2023
+    CreditResponseDto:
+      required:
+        - credit
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+        credit:
+          type: array
+          items:
+            $ref: '#/components/schemas/Credit'
+    CreditRequestDto:
+      required:
+        - amountFee
+        - createDate
+        - customerId
+        - customerType
+        - payDay
+        - quantityFee
+        - settlementAmount
+        - totalAmount
+        - totalFee
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerType:
+          type: string
+          example: PERSONAL
+        totalAmount:
+          type: number
+          format: double
+          example: 500
+        amountFee:
+          type: number
+          format: double
+          example: 18
+        quantityFee:
+          type: integer
+          example: 12
+        totalFee:
+          type: integer
+          example: 12
+        settlementAmount:
+          type: number
+          format: double
+          example: 500
+        payDay:
+          type: string
+          example: 12-03-2023
+        createDate:
+          type: string
+          example: 12-03-2023
+    CreditPayRequestDto:
+      required:
+        - amount
+        - customerId
+        - id
+        - payDay
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        amount:
+          type: number
+          format: double
+          example: 500
+        payDay:
+          type: string
+          example: 12-03-2023
+    CreditPayResponseDto:
+      required:
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+    CreditCard:
+      required:
+        - createDate
+        - creditCardAccount
+        - creditCardId
+        - creditLine
+        - customerId
+        - feeMonth
+        - id
+        - lineAvailable
+        - minimumAmount
+        - payDay
+        - settlementAmount
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        creditLine:
+          type: number
+          format: double
+          example: 1000
+        creditCardAccount:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        creditCardId:
+          type: string
+          example: 1111-2222-3333-4444
+        lineAvailable:
+          type: number
+          format: double
+          example: 1000
+        feeMonth:
+          type: number
+          format: double
+          example: 0
+        minimumAmount:
+          type: number
+          format: double
+          example: 0
+        settlementAmount:
+          type: number
+          format: double
+          example: 0
+        payDay:
+          type: string
+          example: 12-03-2023
+        createDate:
+          type: string
+          example: 12-03-2023
+    CreditCardResponseDto:
+      required:
+        - creditCard
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+        creditCard:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditCard'
+    CreditCardRequestDto:
+      required:
+        - createDate
+        - creditCardAccount
+        - creditCardId
+        - creditLine
+        - customerId
+        - feeMonth
+        - lineAvailable
+        - minimumAmount
+        - payDay
+        - settlementAmount
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        creditLine:
+          type: number
+          format: double
+          example: 1000
+        creditCardAccount:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        creditCardId:
+          type: string
+          example: 1111-2222-3333-4444
+        lineAvailable:
+          type: number
+          format: double
+          example: 1000
+        feeMonth:
+          type: number
+          format: double
+          example: 0
+        minimumAmount:
+          type: number
+          format: double
+          example: 0
+        settlementAmount:
+          type: number
+          format: double
+          example: 0
+        payDay:
+          type: string
+          example: 12-03-2023
+        createDate:
+          type: string
+          example: 12-03-2023
+    CreditCardPayRequestDto:
+      required:
+        - amount
+        - customerId
+        - id
+        - payDay
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        amount:
+          type: number
+          format: double
+          example: 500
+        payDay:
+          type: string
+          example: 12-03-2023
+    CreditCardPayResponseDto:
+      required:
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+    CreditCardConsumeRequestDto:
+      required:
+        - amount
+        - customerId
+        - id
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        amount:
+          type: number
+          format: double
+          example: 500
+    CreditCardConsumeResponseDto:
+      required:
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+    Account:
+      required:
+        - amount
+        - comMaintenance
+        - createDate
+        - customerId
+        - id
+        - monthlyMovements
+        - movementDate
+        - status
+        - typeAccount
+        - typeCustomer
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        typeAccount:
+          type: string
+          example: AHORRO
+        typeCustomer:
+          type: string
+          example: PERSONAL
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        comMaintenance:
+          type: number
+          format: double
+          example: 0
+        movementDate:
+          type: string
+          example: 15-03-2023
+        monthlyMovements:
+          type: integer
+          example: 10
+        amount:
+          type: number
+          format: double
+          example: 500
+        createDate:
+          type: string
+          example: 12-03-2023
+        status:
+          type: integer
+          example: 0
+    AccountResponseDto:
+      required:
+        - account
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+        account:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+    AccountRequestDto:
+      required:
+        - amount
+        - comMaintenance
+        - createDate
+        - customerId
+        - monthlyMovements
+        - movementDate
+        - status
+        - typeAccount
+        - typeCustomer
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        typeAccount:
+          type: string
+          example: AHORRO
+        typeCustomer:
+          type: string
+          example: PERSONAL
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        comMaintenance:
+          type: number
+          format: double
+          example: 0
+        movementDate:
+          type: string
+          example: 15-03-2023
+        monthlyMovements:
+          type: integer
+          example: 10
+        amount:
+          type: number
+          format: double
+          example: 500
+        createDate:
+          type: string
+          example: 12-03-2023
+        status:
+          type: integer
+          example: 0
+    AccountDepositResponseDto:
+      required:
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+    AccountDepositRequestDto:
+      required:
+        - amount
+        - customerId
+        - id
+        - movementDate
+        - typeAccount
+        - typeCustomer
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        typeAccount:
+          type: string
+          example: AHORRO
+        typeCustomer:
+          type: string
+          example: PERSONAL
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        movementDate:
+          type: string
+          example: 15-03-2023
+        amount:
+          type: number
+          format: double
+          example: 500
+    AccountWithdrawResponseDto:
+      required:
+        - statusDto
+      type: object
+      properties:
+        statusDto:
+          $ref: '#/components/schemas/MessageStatus'
+    AccountWithdrawRequestDto:
+      required:
+        - amount
+        - customerId
+        - id
+        - movementDate
+        - typeAccount
+        - typeCustomer
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        typeAccount:
+          type: string
+          example: AHORRO
+        typeCustomer:
+          type: string
+          example: PERSONAL
+        customerId:
+          type: string
+          example: 6413619bf92d28ec5a2e104e
+        movementDate:
+          type: string
+          example: 15-03-2023
+        amount:
+          type: number
+          format: double
