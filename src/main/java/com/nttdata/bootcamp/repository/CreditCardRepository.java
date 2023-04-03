@@ -14,4 +14,6 @@ import java.util.List;
 public interface CreditCardRepository extends MongoRepository<CreditCard, String> {
     @Query("{'id':?0}")
     public List<CreditCard> findByCreditCardId(String id);
+    @Query("{'customerId':?0}")
+    public List<CreditCard> findCreditCardByCustomerId(String customerId);
 }

@@ -18,6 +18,8 @@ public interface CreditCardService {
 
 	Maybe<CreditCardResponseDto> getCreditCardById(String creditCardId);
 
+	Maybe<CreditCardResponseDto> getCreditCardByCustomerId(String customerId);
+
 	Maybe<CreditCardResponseDto> createCreditCard(CreditCardRequestDto creditCardRequestDto);
 
 	Maybe<CreditCardResponseDto> updateCreditCard(CreditCardRequestDto creditCardRequestDto);

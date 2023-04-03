@@ -24,6 +24,8 @@ public interface AccountService {
 
 	Maybe<AccountResponseDto> createAccountPersonal(AccountRequestDto accountRequestDto);
 
+	Maybe<AccountResponseDto> createAccountCompany(AccountRequestDto accountRequestDto);
+
 	Maybe<AccountResponseDto> updateAccount(AccountRequestDto accountRequestDto);
 
 	Maybe<AccountDepositResponseDto> depositAccount(AccountDepositRequestDto accountDepositRequestDto);

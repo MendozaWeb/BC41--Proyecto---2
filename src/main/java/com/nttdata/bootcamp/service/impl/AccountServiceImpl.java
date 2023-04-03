@@ -7,15 +7,22 @@ import com.nttdata.bootcamp.model.AccountRequestDto;
 import com.nttdata.bootcamp.model.AccountResponseDto;
 import com.nttdata.bootcamp.model.AccountWithdrawRequestDto;
 import com.nttdata.bootcamp.model.AccountWithdrawResponseDto;
+import com.nttdata.bootcamp.model.Transaction;
 import com.nttdata.bootcamp.repository.AccountRepository;
+import com.nttdata.bootcamp.repository.CompanyRepository;
+import com.nttdata.bootcamp.repository.PersonRepository;
+import com.nttdata.bootcamp.repository.TransactionRepository;
 import com.nttdata.bootcamp.service.AccountService;
 import com.nttdata.bootcamp.util.Util;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.stream.Collectors;
 
 /**
  * Clase de implementación para la interfaz AccountService
@@ -26,6 +33,15 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
     private AccountRepository accountRepository;
+
+	@Autowired
+	private PersonRepository personRepository;
+
+	@Autowired
+	private CompanyRepository companyRepository;
+
+	@Autowired
+	private TransactionRepository transactionRepository;
 	
 	/**
 	 * Método que devuelve todas las cuentas dentro el repositorio.
@@ -85,11 +101,62 @@ public class AccountServiceImpl implements AccountService {
 		account.setAmount(accountRequestDto.getAmount());
 		account.setCreateDate(accountRequestDto.getCreateDate());
 		account.setStatus(accountRequestDto.getStatus());
-		return Flowable.just(accountRepository.save(account))
+		return Maybe.just(personRepository.findByPersonId(accountRequestDto.getCustomerId()))
+				.flatMap(a->{
+					if(a.isEmpty()){
+						return Maybe.empty();
+					}
+					return Maybe.just(accountRepository.findAccountByCustomerIdAndTypeAccount(a.stream().findFirst().get().getId()
+									,accountRequestDto.getTypeAccount()))
+							.flatMap(res ->{
+								if(res.isEmpty()){
+									return Maybe.just(Util.accountEmpty());
+								}
+								return Maybe.just(Util.accountExists());})
+							.flatMap(res->{
+								if(res.getStatus()==3){
+									return Maybe.just(Util.accountExists());
+								}
+									return Maybe.just(accountRepository.save(account));});
+				})
+				.defaultIfEmpty(Util.accountEmpty())
+				.toFlowable()
 				.collect(Collectors.toList())
 				.map(Util::accountToResponse)
 				.toMaybe();
+	}
 
+	/**
+	 * Crea una nueva cuenta dentro del repositorio con los datos enviados en el body.
+	 * @param accountRequestDto
+	 * @return Flowable<AccountResponseDto>
+	 */
+	@Override
+	public Maybe<AccountResponseDto> createAccountCompany(AccountRequestDto accountRequestDto){
+		Account account = new Account();
+		account.setTypeAccount(accountRequestDto.getTypeAccount());
+		account.setTypeCustomer(accountRequestDto.getTypeCustomer());
+		account.setCustomerId(accountRequestDto.getCustomerId());
+		account.setComMaintenance(accountRequestDto.getComMaintenance());
+		account.setMovementDate(accountRequestDto.getMovementDate());
+		account.setMonthlyMovements(accountRequestDto.getMonthlyMovements());
+		account.setAmount(accountRequestDto.getAmount());
+		account.setCreateDate(accountRequestDto.getCreateDate());
+		account.setStatus(accountRequestDto.getStatus());
+		return Maybe.just(companyRepository.findByCompanyId(accountRequestDto.getCustomerId()))
+				.flatMap(c->{
+					if(c.isEmpty()){
+						return Maybe.empty();
+					}
+					if(accountRequestDto.getTypeAccount().equals("CUENTA_CORRIENTE")){
+						return Maybe.just(accountRepository.save(account));
+					}
+					return Maybe.just(Util.typeNotCompany());
+				}).defaultIfEmpty(Util.accountEmpty())
+				.toFlowable()
+				.collect(Collectors.toList())
+				.map(Util::accountToResponse)
+				.toMaybe();
 	}
 
 	/**
@@ -140,6 +207,14 @@ public class AccountServiceImpl implements AccountService {
 					account.setAmount(uAccount.get(0).getAmount()+accountDepositRequestDto.getAmount());
 					account.setCreateDate(uAccount.get(0).getCreateDate());
 					account.setStatus(uAccount.get(0).getStatus());
+					Transaction transaction = new Transaction();
+					transaction.setProductType(accountDepositRequestDto.getTypeAccount());
+					transaction.setProductId(accountDepositRequestDto.getId());
+					transaction.setCustomerId(accountDepositRequestDto.getCustomerId());
+					transaction.setTransactionType("DEPOSITO");
+					transaction.setAmount(accountDepositRequestDto.getAmount());
+					transaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					transactionRepository.save(transaction);
 					return Maybe.just(accountRepository.save(account));
 				})
 				.toFlowable()
@@ -159,15 +234,31 @@ public class AccountServiceImpl implements AccountService {
 				.flatMap(uAccount -> {
 					Account account = new Account();
 					account.setId(accountWithdrawRequestDto.getId());
+					if(!uAccount.get(0).getCustomerId().equals(accountWithdrawRequestDto.getCustomerId())){
+						return Maybe.just(Util.customerNotAccount());
+					}
 					account.setTypeAccount(uAccount.get(0).getTypeAccount());
 					account.setTypeCustomer(uAccount.get(0).getTypeCustomer());
 					account.setCustomerId(uAccount.get(0).getCustomerId());
 					account.setComMaintenance(uAccount.get(0).getComMaintenance());
 					account.setMovementDate(uAccount.get(0).getMovementDate());
 					account.setMonthlyMovements(uAccount.get(0).getMonthlyMovements());
-					account.setAmount(uAccount.get(0).getAmount()-accountWithdrawRequestDto.getAmount());
+					if(uAccount.get(0).getAmount()>=accountWithdrawRequestDto.getAmount()){
+						account.setAmount(uAccount.get(0).getAmount()-accountWithdrawRequestDto.getAmount());
+					}
+					else{
+						return Maybe.just(Util.accountNotWithdraw());
+					}
 					account.setCreateDate(uAccount.get(0).getCreateDate());
 					account.setStatus(uAccount.get(0).getStatus());
+					Transaction transaction = new Transaction();
+					transaction.setProductType(accountWithdrawRequestDto.getTypeAccount());
+					transaction.setProductId(accountWithdrawRequestDto.getId());
+					transaction.setCustomerId(accountWithdrawRequestDto.getCustomerId());
+					transaction.setTransactionType("RETIRO");
+					transaction.setAmount(accountWithdrawRequestDto.getAmount());
+					transaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+					transactionRepository.save(transaction);
 					return Maybe.just(accountRepository.save(account));
 				})
 				.toFlowable()

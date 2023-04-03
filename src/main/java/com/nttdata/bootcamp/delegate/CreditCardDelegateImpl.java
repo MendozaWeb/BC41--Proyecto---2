@@ -54,7 +54,7 @@ public class CreditCardDelegateImpl implements CreditCardApiDelegate {
      */
     @Override
     public ResponseEntity<CreditCardResponseDto> findCreditCardByCustomerId(String customerId) {
-        return CreditCardApiDelegate.super.findCreditCardByCustomerId(customerId);
+        return ResponseEntity.ok(creditCardService.getCreditCardByCustomerId(customerId).blockingGet());
     }
 
     /**

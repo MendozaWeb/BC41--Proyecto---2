@@ -5,15 +5,18 @@ import com.nttdata.bootcamp.model.CreditPayRequestDto;
 import com.nttdata.bootcamp.model.CreditPayResponseDto;
 import com.nttdata.bootcamp.model.CreditRequestDto;
 import com.nttdata.bootcamp.model.CreditResponseDto;
+import com.nttdata.bootcamp.model.Transaction;
 import com.nttdata.bootcamp.repository.CreditRepository;
+import com.nttdata.bootcamp.repository.TransactionRepository;
 import com.nttdata.bootcamp.service.CreditService;
 import com.nttdata.bootcamp.util.Util;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
 
 /**
  * Clase de implementación para la interfaz CreditService
@@ -23,6 +26,10 @@ public class CreditServiceImpl implements CreditService {
 
     @Autowired
     private CreditRepository creditRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
+
     /**
      * Método que devuelve todos los creditos dentro el repositorio.
      * @return Flowable<CreditResponseDto>
@@ -115,6 +122,14 @@ public class CreditServiceImpl implements CreditService {
                     credit.setSettlementAmount(uCredit.get(0).getSettlementAmount()-creditPayRequestDto.getAmount());
                     credit.setPayDay(uCredit.get(0).getPayDay());
                     credit.setCreateDate(uCredit.get(0).getCreateDate());
+                    Transaction transaction = new Transaction();
+                    transaction.setProductType("CREDITO");
+                    transaction.setProductId(creditPayRequestDto.getId());
+                    transaction.setCustomerId(creditPayRequestDto.getCustomerId());
+                    transaction.setTransactionType("PAGO");
+                    transaction.setAmount(creditPayRequestDto.getAmount());
+                    transaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                    transactionRepository.save(transaction);
                     return Maybe.just(creditRepository.save(credit));
                 })
                 .toFlowable()

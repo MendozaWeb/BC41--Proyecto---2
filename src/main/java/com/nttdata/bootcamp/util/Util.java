@@ -18,7 +18,6 @@ import com.nttdata.bootcamp.model.Person;
 import com.nttdata.bootcamp.model.PersonResponseDto;
 import com.nttdata.bootcamp.model.Transaction;
 import com.nttdata.bootcamp.model.TransactionResponseDto;
-
 import java.util.List;
 
 public class Util {
@@ -80,15 +79,12 @@ public class Util {
     public static CreditCardResponseDto creditCardToResponse(List<CreditCard> creditCard){
         CreditCardResponseDto creditCardResponseDto = new CreditCardResponseDto();
         MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen tarjetas de credito.");
+        creditCardResponseDto.setCreditCard(null);
         if (creditCard.size()>0){
             msg.setStatusCode("0");
             msg.setMessage("Operación exitosa.");
-            creditCardResponseDto.setStatusDto(msg);
-            creditCardResponseDto.setCreditCard(creditCard);
-        }
-        else{
-            msg.setStatusCode("1");
-            msg.setMessage("No existen tarjetas de credito.");
             creditCardResponseDto.setStatusDto(msg);
             creditCardResponseDto.setCreditCard(creditCard);
         }
@@ -132,33 +128,53 @@ public class Util {
     public static CreditCardPayResponseDto creditCardPayToResponse(List<CreditCard> creditCard){
         CreditCardPayResponseDto creditCardPayResponseDto = new CreditCardPayResponseDto();
         MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen tarjetas de credito.");
         if (creditCard.size()>0){
-            msg.setStatusCode("0");
-            msg.setMessage("Operación exitosa.");
-            creditCardPayResponseDto.setStatusDto(msg);
+            switch (creditCard.get(0).getId()){
+                case "2":
+                    msg.setStatusCode("2");
+                    msg.setMessage("El cliente no es el titular de la tarjeta de credito.");
+                    break;
+                case "3":
+                    msg.setStatusCode("3");
+                    msg.setMessage("La tarjeta de credito no tiene deuda pendiente o el monto excede la deuda pendiente.");
+                    break;
+                default:
+                    msg.setStatusCode("0");
+                    msg.setMessage("Operación exitosa.");
+                    creditCardPayResponseDto.setStatusDto(msg);
+                    break;
+            }
         }
-        else{
-            msg.setStatusCode("1");
-            msg.setMessage("No existen creditos.");
-            creditCardPayResponseDto.setStatusDto(msg);
-        }
+        creditCardPayResponseDto.setStatusDto(msg);
         return creditCardPayResponseDto;
     }
 
     public static CreditCardConsumeResponseDto creditCardConsumeToResponse(List<CreditCard> creditCard){
-        CreditCardConsumeResponseDto creditCardPayResponseDto = new CreditCardConsumeResponseDto();
+        CreditCardConsumeResponseDto creditCardConsumeResponseDto = new CreditCardConsumeResponseDto();
         MessageStatus msg = new MessageStatus();
+        msg.setStatusCode("1");
+        msg.setMessage("No existen tarjetas de credito.");
         if (creditCard.size()>0){
-            msg.setStatusCode("0");
-            msg.setMessage("Operación exitosa.");
-            creditCardPayResponseDto.setStatusDto(msg);
+            switch (creditCard.get(0).getId()){
+                case "2":
+                    msg.setStatusCode("2");
+                    msg.setMessage("El cliente no es el titular de la tarjeta de credito.");
+                    break;
+                case "3":
+                    msg.setStatusCode("3");
+                    msg.setMessage("La tarjeta de credito no tiene linea disponible.");
+                    break;
+                default:
+                    msg.setStatusCode("0");
+                    msg.setMessage("Operación exitosa.");
+                    creditCardConsumeResponseDto.setStatusDto(msg);
+                    break;
+            }
         }
-        else{
-            msg.setStatusCode("1");
-            msg.setMessage("No existen creditos.");
-            creditCardPayResponseDto.setStatusDto(msg);
-        }
-        return creditCardPayResponseDto;
+        creditCardConsumeResponseDto.setStatusDto(msg);
+        return creditCardConsumeResponseDto;
     }
     public static AccountResponseDto accountToResponse(List<Account> account){
         AccountResponseDto accountResponseDto = new AccountResponseDto();
@@ -166,11 +182,6 @@ public class Util {
         msg.setStatusCode("1");
         msg.setMessage("No existen cuentas.");
         accountResponseDto.setAccount(null);
-        if (account.size()>0 && !account.get(0).getId().equals("0")){
-            msg.setStatusCode("0");
-            msg.setMessage("Operación exitosa.");
-            accountResponseDto.setAccount(account);
-        }
         if(account.size()>0){
             switch (account.get(0).getStatus()) {
                 case 3:
@@ -180,6 +191,15 @@ public class Util {
                 case 4:
                     msg.setStatusCode("4");
                     msg.setMessage("No existe el cliente.");
+                    break;
+                case 5:
+                    msg.setStatusCode("5");
+                    msg.setMessage("El cliente solo puede tener cuentas corrientes.");
+                    break;
+                default:
+                    msg.setStatusCode("0");
+                    msg.setMessage("Operación exitosa.");
+                    accountResponseDto.setAccount(account);
                     break;
             }
         }
@@ -206,11 +226,71 @@ public class Util {
         msg.setStatusCode("1");
         msg.setMessage("No existen cuentas.");
         if (account.size()>0){
-            msg.setStatusCode("0");
-            msg.setMessage("Operación exitosa.");
+            switch (account.get(0).getStatus()){
+                case 2:
+                    msg.setStatusCode("2");
+                    msg.setMessage("La cuenta no tiene suficiente saldo.");
+                    break;
+                case 3:
+                    msg.setStatusCode("3");
+                    msg.setMessage("El cliente no es el titular de la cuenta.");
+                    break;
+                default:
+                    msg.setStatusCode("0");
+                    msg.setMessage("Operación exitosa.");
+                    break;
+            }
         }
+
         accountWithdrawResponseDto.setStatusDto(msg);
         return accountWithdrawResponseDto;
+    }
+
+    public static Account accountExists(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(3);
+        return account;
+    }
+
+    public static Account accountEmpty(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(4);
+        return account;
+    }
+    public static Account typeNotCompany(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(5);
+        return account;
+    }
+    public static Account accountNotWithdraw(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(2);
+        return account;
+    }
+    public static Account customerNotAccount(){
+        Account account = new Account();
+        account.setId("0");
+        account.setStatus(3);
+        return account;
+    }
+    public static CreditCard customerNotCreditCard(){
+        CreditCard creditCard = new CreditCard();
+        creditCard.setId("2");
+        return creditCard;
+    }
+    public static CreditCard creditCardNotWithdraw(){
+        CreditCard creditCard = new CreditCard();
+        creditCard.setId("3");
+        return creditCard;
+    }
+    public static CreditCard creditCardNotPay(){
+        CreditCard creditCard = new CreditCard();
+        creditCard.setId("3");
+        return creditCard;
     }
 
 }

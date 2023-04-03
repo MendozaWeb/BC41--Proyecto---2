@@ -17,6 +17,8 @@ public interface AccountRepository extends MongoRepository<Account, String> {
     @Query("{'customerId':?0}")
     public List<Account> findAccountByCustomerId(String customerId);
     @Query("{'typeAccount':?0}")
-    public List<Account> findAccountByTypeAccount(String productId);
+    public List<Account> findAccountByTypeAccount(String typeAccount);
+    @Query("{'customerId':?0 ,'typeAccount':?1}")
+    public List<Account> findAccountByCustomerIdAndTypeAccount(String customerId,String typeAccount);
 
 }

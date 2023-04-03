@@ -25,7 +25,7 @@ public class AccountDelegateImpl implements AccountApiDelegate {
      */
     @Override
     public ResponseEntity<AccountResponseDto> createAccountCompany(AccountRequestDto accountRequestDto) {
-        return ResponseEntity.ok(accountService.createAccountPersonal(accountRequestDto).blockingGet());
+        return ResponseEntity.ok(accountService.createAccountCompany(accountRequestDto).blockingGet());
     }
 
     /**
